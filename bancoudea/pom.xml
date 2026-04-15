@@ -31,6 +31,7 @@
 			<mapstruct.version>1.5.5.Final</mapstruct.version>
 			<sonar.organization>andiespejo</sonar.organization>
 			<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+			<sonar.projectKey>AndiEspejo_laboratorio1_arquitectura</sonar.projectKey>
 		</properties>
 	<dependencies>
 		<dependency>

@@ -80,7 +80,7 @@ jobs:
 
       - name: Run SonarCloud analysis
         if: env.SONAR_TOKEN != ''
-        run: ./mvnw -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=AndiEspejo_laboratorio1_arquitectura
+        run: ./mvnw -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
 
   build:
     name: Build JAR
