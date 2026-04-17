@@ -14,11 +14,22 @@ Repositorio del laboratorio con dos frentes principales:
 
 La automatización CI/CD del laboratorio está enfocada hoy en el backend `bancoudea`.
 
+## Docker y Render
+
+- `docker-compose.yml` levanta **backend + MySQL** juntos para desarrollo/demo local con `docker compose up --build`
+- `render.yaml` define el despliegue recomendado en Render con:
+  - un **Web Service** para `bancoudea`
+  - un **Private Service** MySQL 8 con disco persistente
+
+Para Render, la idea correcta NO es meter backend + base de datos en una sola imagen, sino desplegarlos como servicios separados dentro de la misma infraestructura.
+
 ## Estructura del repositorio
 
 - `bancoudea/` → backend Java/Spring Boot
 - `frontend/` → frontend
 - `.github/workflows/build.yml` → pipeline CI/CD del backend
+- `docker-compose.yml` → stack local con backend + MySQL
+- `render.yaml` → blueprint para Render con web service + private MySQL
 
 ## Backend (`bancoudea`)
 

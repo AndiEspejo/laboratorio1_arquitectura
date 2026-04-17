@@ -1,0 +1,41 @@
+services:
+  - type: web
+    name: bancoudea
+    runtime: docker
+    plan: starter
+    autoDeployTrigger: checksPass
+    dockerfilePath: ./bancoudea/Dockerfile
+    dockerContext: ./bancoudea
+    healthCheckPath: /api/customers
+    envVars:
+      - key: DB_URL
+        value: jdbc:mysql://mysql:3306/bancoudea?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      - key: DB_USERNAME
+        value: bancoudea
+      - key: DB_PASSWORD
+        fromService:
+          type: pserv
+          name: mysql
+          envVarKey: MYSQL_PASSWORD
+      - key: JPA_DDL_AUTO
+        value: update
+
+  - type: pserv
+    name: mysql
+    runtime: image
+    plan: starter
+    image:
+      url: docker.io/mysql:8.0
+    disk:
+      name: mysql-data
+      mountPath: /var/lib/mysql
+      sizeGB: 10
+    envVars:
+      - key: MYSQL_DATABASE
+        value: bancoudea
+      - key: MYSQL_USER
+        value: bancoudea
+      - key: MYSQL_PASSWORD
+        generateValue: true
+      - key: MYSQL_ROOT_PASSWORD
+        generateValue: true

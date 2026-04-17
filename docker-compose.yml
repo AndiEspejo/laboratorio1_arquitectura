@@ -1,0 +1,40 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: bancoudea-mysql
+    environment:
+      MYSQL_DATABASE: bancoudea
+      MYSQL_USER: bancoudea
+      MYSQL_PASSWORD: bancoudea
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+  bancoudea:
+    build:
+      context: ./bancoudea
+      dockerfile: Dockerfile
+    container_name: bancoudea-app
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      PORT: 8080
+      DB_URL: jdbc:mysql://mysql:3306/bancoudea?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      DB_USERNAME: bancoudea
+      DB_PASSWORD: bancoudea
+      JPA_DDL_AUTO: update
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+
+volumes:
+  mysql-data:

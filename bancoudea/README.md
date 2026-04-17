@@ -79,6 +79,28 @@ docker run -p 8080:8080 \
   bancoudea:latest
 ```
 
+### Backend + MySQL juntos con Docker Compose
+
+Desde la raíz del repo:
+
+```bash
+docker compose up --build
+```
+
+Eso levanta:
+
+- `mysql` en `localhost:3306`
+- `bancoudea` en `localhost:8080`
+
+### Render
+
+El repo incluye `render.yaml` para desplegar:
+
+- un **Web Service** con este backend
+- un **Private Service** MySQL 8 con disco persistente
+
+Así evitás el anti-pattern de meter app + base de datos en una sola imagen.
+
 ## CI/CD
 
 El workflow del repositorio corre sólo para el backend `bancoudea` y contempla:
