@@ -177,18 +177,30 @@ jobs:
         if: env.DOCKER_USERNAME == '' || env.DOCKER_PASSWORD == ''
         run: echo 'Docker Hub secrets are not configured yet. Skipping image publishing.'
 
-  deploy-render:
-    name: Deploy to Render
+  deploy-azure:
+    name: Deploy to Azure App Service
     needs: docker
     runs-on: ubuntu-latest
     env:
-      RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+      AZURE_WEBAPP_NAME: ${{ secrets.AZURE_WEBAPP_NAME }}
+      AZURE_WEBAPP_PUBLISH_PROFILE: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
 
     steps:
-      - name: Trigger Render deployment
-        if: env.RENDER_DEPLOY_HOOK_URL != ''
-        run: curl -fsSL -X POST "$RENDER_DEPLOY_HOOK_URL"
+      - name: Download JAR artifact
+        if: env.AZURE_WEBAPP_NAME != '' && env.AZURE_WEBAPP_PUBLISH_PROFILE != ''
+        uses: actions/download-artifact@v4
+        with:
+          name: bancoudea-artifact
+          path: bancoudea/target
 
-      - name: Skip Render deployment when secret is missing
-        if: env.RENDER_DEPLOY_HOOK_URL == ''
-        run: echo 'RENDER_DEPLOY_HOOK_URL is not configured yet. Skipping cloud deployment.'
+      - name: Deploy to Azure Web App
+        if: env.AZURE_WEBAPP_NAME != '' && env.AZURE_WEBAPP_PUBLISH_PROFILE != ''
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: ${{ secrets.AZURE_WEBAPP_NAME }}
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: bancoudea/target/*.jar
+
+      - name: Skip Azure deployment when secrets are missing
+        if: env.AZURE_WEBAPP_NAME == '' || env.AZURE_WEBAPP_PUBLISH_PROFILE == ''
+        run: echo 'Azure App Service secrets are not configured yet. Skipping cloud deployment.'

@@ -14,14 +14,13 @@ Repositorio del laboratorio con dos frentes principales:
 
 La automatización CI/CD del laboratorio está enfocada hoy en el backend `bancoudea`.
 
-## Docker y Render
+## Docker, Render y Azure
 
 - `docker-compose.yml` levanta **backend + MySQL** juntos para desarrollo/demo local con `docker compose up --build`
-- `render.yaml` define el despliegue recomendado en Render con:
-  - un **Web Service** para `bancoudea`
-  - un **Private Service** MySQL 8 con disco persistente
+- `render.yaml` sigue disponible como alternativa manual para Render con backend + MySQL separados
+- el **despliegue automático actual del pipeline** apunta a **Azure App Service**
 
-Para Render, la idea correcta NO es meter backend + base de datos en una sola imagen, sino desplegarlos como servicios separados dentro de la misma infraestructura.
+Para no gastar de más en un laboratorio académico, el deploy de Azure usa un **perfil `azure` con H2 en memoria**. Eso evita pagar una base administrada solo para que el profe pruebe el backend una o dos veces.
 
 ## Estructura del repositorio
 
@@ -29,7 +28,7 @@ Para Render, la idea correcta NO es meter backend + base de datos en una sola im
 - `frontend/` → frontend
 - `.github/workflows/build.yml` → pipeline CI/CD del backend
 - `docker-compose.yml` → stack local con backend + MySQL
-- `render.yaml` → blueprint para Render con web service + private MySQL
+- `render.yaml` → blueprint alternativo para Render
 
 ## Backend (`bancoudea`)
 
@@ -40,7 +39,7 @@ Para Render, la idea correcta NO es meter backend + base de datos en una sola im
 - Maven Wrapper
 - Spring Data JPA
 - MySQL en desarrollo
-- H2 para tests y CI
+- H2 para tests/CI y demo económica en Azure
 
 ### Endpoints principales
 
@@ -93,6 +92,17 @@ cd bancoudea
 docker build -t bancoudea:latest .
 ```
 
+## Azure App Service (recomendado para la entrega)
+
+1. Crear un **Web App** en Azure App Service con **Java 17 / Java SE**. Si querés usar el plan **Free/F1**, normalmente te conviene **Windows**.
+2. En **Configuration > Application settings**, agregar: `SPRING_PROFILES_ACTIVE=azure`.
+3. Si al descargar el publish profile te aparece `Basic authentication is disabled`, habilitá **SCM Basic Auth Publishing Credentials** en el Web App y volvé a intentar.
+4. Descargar el **publish profile** desde el portal.
+5. Guardar estos secrets en GitHub Actions:
+   - `AZURE_WEBAPP_NAME`
+   - `AZURE_WEBAPP_PUBLISH_PROFILE`
+6. Hacer push a `main` para que el pipeline despliegue el JAR automáticamente.
+
 ## Required GitHub secrets
 
 Para activar el flujo completo del laboratorio en GitHub:
@@ -101,7 +111,8 @@ Para activar el flujo completo del laboratorio en GitHub:
 - `SNYK_TOKEN`
 - `DOCKER_USERNAME`
 - `DOCKER_PASSWORD`
-- `RENDER_DEPLOY_HOOK_URL`
+- `AZURE_WEBAPP_NAME`
+- `AZURE_WEBAPP_PUBLISH_PROFILE`
 
 ## Pipeline stages
 
@@ -110,7 +121,7 @@ Para activar el flujo completo del laboratorio en GitHub:
 3. **Build JAR** → genera y publica el artefacto del backend
 4. **Snyk scan** → analiza vulnerabilidades cuando existe `SNYK_TOKEN`
 5. **Docker image** → construye/publica `DOCKER_USERNAME/bancoudea:latest` cuando existen credenciales Docker
-6. **Deploy to Render** → dispara el deploy hook cuando existe `RENDER_DEPLOY_HOOK_URL`
+6. **Deploy to Azure App Service** → publica el JAR en Azure cuando existen `AZURE_WEBAPP_NAME` y `AZURE_WEBAPP_PUBLISH_PROFILE`
 
 ## Notas
 

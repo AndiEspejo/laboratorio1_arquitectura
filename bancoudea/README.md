@@ -13,7 +13,7 @@ Backend Spring Boot del laboratorio de Arquitectura de Software.
 - Maven Wrapper
 - Spring Data JPA
 - MySQL en desarrollo
-- H2 para tests/CI
+- H2 para tests/CI y perfil demo en Azure
 
 ## Endpoints principales
 
@@ -55,6 +55,16 @@ Los tests usan H2 en memoria con el perfil `test`, así que no dependen de MySQL
 ./mvnw test
 ```
 
+### Perfil Azure para demo académica
+
+Si querés simular localmente el mismo modo barato que se publica en Azure App Service:
+
+```bash
+SPRING_PROFILES_ACTIVE=azure ./mvnw spring-boot:run
+```
+
+Ese perfil usa H2 en memoria para evitar el costo de una base externa en una entrega donde la app se va a probar muy pocas veces.
+
 ## Empaquetado
 
 ```bash
@@ -94,12 +104,19 @@ Eso levanta:
 
 ### Render
 
-El repo incluye `render.yaml` para desplegar:
+El repo incluye `render.yaml` como alternativa manual para desplegar backend + MySQL por separado en Render.
 
-- un **Web Service** con este backend
-- un **Private Service** MySQL 8 con disco persistente
+### Azure App Service
 
-Así evitás el anti-pattern de meter app + base de datos en una sola imagen.
+El pipeline actual despliega a Azure App Service usando el perfil `azure`, pensado para una demo académica barata:
+
+1. Crear un **Web App** con **Java 17 / Java SE**. Si querés usar el plan **Free/F1**, normalmente te conviene **Windows**.
+2. En el portal, agregar `SPRING_PROFILES_ACTIVE=azure` en **Application settings**.
+3. Si al descargar el publish profile te aparece `Basic authentication is disabled`, habilitá **SCM Basic Auth Publishing Credentials** en el Web App y volvé a intentar.
+4. Descargar el **publish profile** del Web App.
+5. Cargar en GitHub:
+   - `AZURE_WEBAPP_NAME`
+   - `AZURE_WEBAPP_PUBLISH_PROFILE`
 
 ## CI/CD
 
@@ -110,7 +127,7 @@ El workflow del repositorio corre sólo para el backend `bancoudea` y contempla:
 3. build del JAR
 4. escaneo de Snyk
 5. build/push de imagen Docker
-6. deploy opcional a Render
+6. deploy opcional a Azure App Service
 
 ## Secrets esperados en GitHub
 
@@ -118,4 +135,5 @@ El workflow del repositorio corre sólo para el backend `bancoudea` y contempla:
 - `SNYK_TOKEN`
 - `DOCKER_USERNAME`
 - `DOCKER_PASSWORD`
-- `RENDER_DEPLOY_HOOK_URL`
+- `AZURE_WEBAPP_NAME`
+- `AZURE_WEBAPP_PUBLISH_PROFILE`
