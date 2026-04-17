@@ -1,11 +1,11 @@
 # Laboratorio 1 - Arquitectura Software
 
 [![CI/CD Pipeline](https://github.com/AndiEspejo/laboratorio1_arquitectura/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/AndiEspejo/laboratorio1_arquitectura/blob/main/.github/workflows/build.yml)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=AndiEspejo_laboratorio1_arquitectura&metric=alert_status&branch=main&token=4e5ac4f1d39b4e7df29bac1294fc56521335d78d)](https://sonarcloud.io/dashboard?id=AndiEspejo_laboratorio1_arquitectura&branch=main)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=AndiEspejo_laboratorio1_arquitectura&metric=coverage&branch=main&token=4e5ac4f1d39b4e7df29bac1294fc56521335d78d)](https://sonarcloud.io/dashboard?id=AndiEspejo_laboratorio1_arquitectura&branch=main)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=AndiEspejo_laboratorio1_arquitectura&metric=alert_status&token=4e5ac4f1d39b4e7df29bac1294fc56521335d78d)](https://sonarcloud.io/summary/new_code?id=AndiEspejo_laboratorio1_arquitectura)
-[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=AndiEspejo_laboratorio1_arquitectura&metric=vulnerabilities&token=4e5ac4f1d39b4e7df29bac1294fc56521335d78d)](https://sonarcloud.io/summary/new_code?id=AndiEspejo_laboratorio1_arquitectura)
-[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=AndiEspejo_laboratorio1_arquitectura&metric=code_smells&token=4e5ac4f1d39b4e7df29bac1294fc56521335d78d)](https://sonarcloud.io/summary/new_code?id=AndiEspejo_laboratorio1_arquitectura)
-[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=AndiEspejo_laboratorio1_arquitectura&metric=code_smells&token=4e5ac4f1d39b4e7df29bac1294fc56521335d78d)](https://sonarcloud.io/summary/new_code?id=AndiEspejo_laboratorio1_arquitectura)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=AndiEspejo_laboratorio1_arquitectura&metric=vulnerabilities&branch=main&token=4e5ac4f1d39b4e7df29bac1294fc56521335d78d)](https://sonarcloud.io/dashboard?id=AndiEspejo_laboratorio1_arquitectura&branch=main)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=AndiEspejo_laboratorio1_arquitectura&metric=code_smells&branch=main&token=4e5ac4f1d39b4e7df29bac1294fc56521335d78d)](https://sonarcloud.io/dashboard?id=AndiEspejo_laboratorio1_arquitectura&branch=main)
+[![Snyk](https://img.shields.io/badge/Snyk-monitored-8A2BE2?logo=snyk&logoColor=white)](https://app.snyk.io/org/andiespejo/project/7ded8268-becc-4b37-bef6-e63e336e7299)
 
 Repositorio del laboratorio con dos frentes principales:
 
